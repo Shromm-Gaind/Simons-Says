@@ -49,6 +49,22 @@ static inline void play_sequence(uint16_t sequence_length) {
     }
 }
 
+static inline void process_user_input(uint16_t sequence_length) {
+    if (user_input) {
+        if (!user_correct) {
+            user_correct = 1;    // Reset flag
+            input_count = 0;     // Reset flag
+            gameplay_stage = FAIL;
+        } else {
+            if (input_count == sequence_length) {
+                input_count = 0;  // Reset count
+                gameplay_stage = SUCCESS;
+            }
+        }
+        user_input = 0;  // Reset user input flag
+    }
+}
+
 
 
 int main(void)
@@ -96,25 +112,7 @@ int main(void)
                 button = WAIT;
                 break;
             }
-
-            if (user_input) // If user input is detected.
-            {
-                if (!user_correct)
-                {
-                    user_correct = 1; // Reset flag.
-                    input_count = 0;  // Reset flag.
-                    gameplay_stage = FAIL;
-                }
-                else
-                {
-                    if (input_count == sequence_length) // If the number of inputs matches the sequence length.
-                    {
-                        input_count = 0; // Reset count.
-                        gameplay_stage = SUCCESS;
-                    }
-                }
-                user_input = 0; // Reset user input flag.
-            }
+            process_user_input(sequence_length);
             break;
         case SUCCESS:
             update_display(0, 0); // Success pattern.
