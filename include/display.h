@@ -4,7 +4,7 @@ extern volatile uint8_t left_byte;
 extern volatile uint8_t right_byte;
 
 // Segment display hexadecimal values for digits
-extern volatile uint8_t segs[11];
+extern volatile uint8_t segments[11];
 
 
 #define DISP_SEG_B 0b01101111

@@ -25,12 +25,7 @@ gameplay_stages gameplay_stage = INIT;
 int main(void)
 {
     cli(); // Disable interrupts for initialisation functions
-    adc_init();
-    button_init();
-    spi_init();
-    pwm_init();
-    timers_init();
-    uart_init();
+    INIT_ALL_SYSTEMS();
     sei(); // Enable interrupts
 
     uint16_t sequence_length;
@@ -47,18 +42,18 @@ int main(void)
             break;
         case SIMON:
             state_lsfr = re_init_state; // Initialise state to recreate the same sequence of steps as re_init_state.
-            prepare_delay();
-            if (delay_ready)
+            calculate_playback_delay();
+            if (adc_ready_flag)
             {   
                 for (int i = 0; i < sequence_length; i++)
                 {
                     SEQUENCE(&state_lsfr, &step, &result); // Create new step
                     buzzer_on(step);
                     display_segment(step);
-                    half_playback_delay(); // Half delay
+                    half_of_delay(); // Half delay
                     buzzer_off();
                     display_segment(4);    // Display off.
-                    half_playback_delay(); // Half delay
+                    half_of_delay(); // Half delay
                 }
                 state_lsfr = re_init_state; // Re-initialise state to recreate the same sequence, for the user's, as displayed by Simon.
                 gameplay_stage = PLAYER;
@@ -74,7 +69,7 @@ int main(void)
                     {
                         SEQUENCE(&state_lsfr, &step, &result); // Update the step to compare the user's input to.
                         key_pressed = 0;                   // Rest key pressed flag bitmask.
-                        elapsed_time = 0;                  // Start timer.
+                        playback_timer = 0;                  // Start timer.
                         input_count++;                     // Log input.
                         button = arr[i].button;            // Change states.
                     }
@@ -124,19 +119,19 @@ int main(void)
             break;
         case SUCCESS:
             update_display(0, 0); // Success pattern.
-            playback_delay();
+            delay();
             display_segment(4); // Display off.
             sequence_length++;
             gameplay_stage = SIMON;
             break;
         case FAIL:
             update_display(0b01110111, 0b01110111); // Fail pattern.
-            playback_delay();
+            delay();
             extract_digits(sequence_length, &left_digit, &right_digit); // Extract digits from the sequence length (user's score) to be displayed.
-            update_display(segs[left_digit], segs[right_digit]);
-            playback_delay();
+            update_display(segments[left_digit], segments[right_digit]);
+            delay();
             display_segment(4); // Display off.
-            playback_delay();
+            delay();
             SEQUENCE(&state_lsfr, &step, &result); // Get next step to re-initialise to.
             re_init_state = state_lsfr;        // Re-initialise sequence to where it was left off.
             gameplay_stage = INIT;

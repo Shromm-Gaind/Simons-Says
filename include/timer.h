@@ -1,8 +1,8 @@
 #include <stdint.h>
 
-volatile uint16_t playback_delay_ms;
-volatile uint16_t elapsed_time;
-void prepare_delay(void);
-void playback_delay(void);
-void half_playback_delay(void);
-uint8_t delay_ready;
+volatile uint16_t playback_delay;
+volatile uint16_t playback_timer;
+void calculate_playback_delay(void);
+void delay(void);
+void half_of_delay(void);
+uint8_t adc_ready_flag;

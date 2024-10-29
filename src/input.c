@@ -6,6 +6,7 @@
 #include "types.h"
 #include "lsfr.h"
 #include "buzzer.h"
+#include "spi.h"
 
 // Variables for pushbutton/key press handling:
 uint8_t pb_sample = 0xFF;
@@ -101,7 +102,7 @@ void handle_button(uint8_t button_index)
     else
     {
         // If playback delay has elapsed since the button press.
-        if (elapsed_time >= (playback_delay_ms >> 1))
+        if (playback_timer >= (playback_delay >> 1))
         {
             buzzer_off();
             display_segment(4);
@@ -110,4 +111,15 @@ void handle_button(uint8_t button_index)
             button = WAIT;
         }
     }
+}
+
+// ISR: TCB1_INT_vect
+// Description: Timer interrupt service routine triggered every 5ms.
+ISR(TCB1_INT_vect)
+{
+    pb_debounce();
+    spi_write();   // Write data to SPI
+
+
+    TCB1.INTFLAGS = TCB_CAPT_bm; // Clear interrupt flag
 }
