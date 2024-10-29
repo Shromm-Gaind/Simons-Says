@@ -3,8 +3,8 @@
 
 // Linear Shift Feedback Register (LSFR) constants and variables
 extern uint32_t mask;
-extern uint32_t re_init_state;
-extern uint32_t state_lsfr;
+extern uint32_t seed;
+extern uint32_t state_sequence;
 extern uint8_t step;
 extern uint8_t result;
 

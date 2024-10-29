@@ -20,7 +20,7 @@ gameplay_stages gameplay_stage = INIT;
 static inline void check_button_input(void) {
     for (int i = 0; i < 4; i++) {
         if ((pb_falling | key_pressed) & arr[i].pin) {
-            SEQUENCE(&state_lsfr, &step, &result);
+            SEQUENCE(&state_sequence, &step, &result);
             key_pressed = 0;
             playback_timer = 0;
             input_count++;
@@ -36,7 +36,7 @@ static inline void check_button_input(void) {
 static inline void play_sequence(uint16_t sequence_length) {
     if (adc_ready_flag) {   
         for (int i = 0; i < sequence_length; i++) {
-            SEQUENCE(&state_lsfr, &step, &result);
+            SEQUENCE(&state_sequence, &step, &result);
             buzzer_on(step);
             display_segment(step);
             half_of_delay();
@@ -44,7 +44,7 @@ static inline void play_sequence(uint16_t sequence_length) {
             display_segment(4);
             half_of_delay();
         }
-        state_lsfr = re_init_state;
+        state_sequence = seed;
         gameplay_stage = PLAYER;
     }
 }
@@ -86,7 +86,7 @@ int main(void)
             gameplay_stage = SIMON;
             break;
         case SIMON:
-            state_lsfr = re_init_state; // Initialise state to recreate the same sequence of steps as re_init_state.
+            state_sequence = seed; // Initialise state to recreate the same sequence of steps as re_init_state.
             calculate_playback_delay();
             play_sequence(sequence_length);
             break;
@@ -129,8 +129,8 @@ int main(void)
             delay();
             display_segment(4); // Display off.
             delay();
-            SEQUENCE(&state_lsfr, &step, &result); // Get next step to re-initialise to.
-            re_init_state = state_lsfr;        // Re-initialise sequence to where it was left off.
+            SEQUENCE(&state_sequence, &step, &result); // Get next step to re-initialise to.
+            seed = state_sequence;        // Re-initialise sequence to where it was left off.
             gameplay_stage = INIT;
             break;
         default:

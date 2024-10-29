@@ -4,8 +4,8 @@
 
 // Linear Shift Feedback Register (LSFR) variables:
 uint32_t mask = 0xE2024CAB;
-uint32_t re_init_state = 0x11638494;
-uint32_t state_lsfr;
+uint32_t seed = 0x11638494;
+uint32_t state_sequence;
 uint8_t step;
 uint8_t result;
 
