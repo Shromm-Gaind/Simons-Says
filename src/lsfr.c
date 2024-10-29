@@ -15,7 +15,7 @@ uint8_t result;
 //  - state: Pointer to the current state of the LSFR
 //  - step: Pointer to the variable to store the next step
 //  - result: Pointer to store the least significant bit of the statevoid
-void LSFR(uint32_t *state, uint8_t *step, uint8_t *result)
+void SEQUENCE(uint32_t *state, uint8_t *step, uint8_t *result)
 {
     *result = *state & 1;
     *state >>= 1;

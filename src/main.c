@@ -52,7 +52,7 @@ int main(void)
             {   
                 for (int i = 0; i < sequence_length; i++)
                 {
-                    LSFR(&state_lsfr, &step, &result); // Create new step
+                    SEQUENCE(&state_lsfr, &step, &result); // Create new step
                     buzzer_on(step);
                     display_segment(step);
                     half_playback_delay(); // Half delay
@@ -72,7 +72,7 @@ int main(void)
                 {
                     if ((pb_falling | key_pressed) & arr[i].pin) // Check if pushbutton or key pressed.
                     {
-                        LSFR(&state_lsfr, &step, &result); // Update the step to compare the user's input to.
+                        SEQUENCE(&state_lsfr, &step, &result); // Update the step to compare the user's input to.
                         key_pressed = 0;                   // Rest key pressed flag bitmask.
                         elapsed_time = 0;                  // Start timer.
                         input_count++;                     // Log input.
@@ -137,7 +137,7 @@ int main(void)
             playback_delay();
             display_segment(4); // Display off.
             playback_delay();
-            LSFR(&state_lsfr, &step, &result); // Get next step to re-initialise to.
+            SEQUENCE(&state_lsfr, &step, &result); // Get next step to re-initialise to.
             re_init_state = state_lsfr;        // Re-initialise sequence to where it was left off.
             gameplay_stage = INIT;
             break;

@@ -28,7 +28,8 @@ void prepare_delay(void)
 
         // Clear the Result Ready flag
         ADC0.INTFLAGS = ADC_RESRDY_bm;
-        playback_delay_ms = (7 * adc_result) + 250;
+
+        playback_delay_ms = (2000 + (56 * adc_result) - adc_result) >> 3;
     }
 }
 
