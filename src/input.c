@@ -76,42 +76,31 @@ button_pin arr[4] = {{PIN4_bm, BUTTON1}, {PIN5_bm, BUTTON2}, {PIN6_bm, BUTTON3},
 // Description: Handles button press events during the PLAYER stage
 // Parameters:
 //  - button_index: Index of the button pressed
-void handle_button(uint8_t button_index)
+void handle_button(uint8_t button_index) 
 {
+    const uint8_t button_pin = arr[button_index].pin;
+    
     buzzer_on(button_index);
     display_segment(button_index);
 
-    // Check if user's input was correct
-    if (step != button_index)
-    {
+    if (step != button_index) {
         user_correct = 0;
     }
 
-    if (!pb_released)
-    {
-        if (pb_rising & arr[button_index].pin) // If the pushbutton was released.
-        {
+    if (!pb_released) {
+        if ((pb_rising & button_pin) || !pushbutton_received) {
             pb_released = 1;
-            pushbutton_received = 0; // Reset flag.
+            pushbutton_received = 0;
         }
-        else if (!pushbutton_received) // If there was not a pushbutton input (UART input).
-        {
-            pb_released = 1;
-        }
-    }
-    else
-    {
-        // If playback delay has elapsed since the button press.
-        if (playback_timer >= (playback_delay >> 1))
-        {
-            buzzer_off();
-            display_segment(4);
-            user_input = 1;  // Set user input flage.
-            pb_released = 0; // Reset pushbutton released flag.
-            button = WAIT;
-        }
+    } else if (playback_timer >= (playback_delay >> 1)) {
+        buzzer_off();
+        display_segment(4);
+        user_input = 1;
+        pb_released = 0;
+        button = WAIT;
     }
 }
+
 
 // ISR: TCB1_INT_vect
 // Description: Timer interrupt service routine triggered every 5ms.
