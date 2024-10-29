@@ -34,16 +34,7 @@ typedef struct {
 // Button mapping array
 extern button_pin arr[4];
 
-// Function: extract_digits
-// Description: Separates an integer into its tens and units digits
-// Parameters:
-//  - number: The number to be split into digits
-//  - left_digit: Pointer to store the tens digit
-//  - right_digit: Pointer to store the units digit
-void extract_digits(uint32_t number, uint8_t *left_digit, uint8_t *right_digit);
 
-// Segment display hexadecimal values for digits
-extern volatile uint8_t segs[11];
 
 // Function: handle_button
 // Description: Handles button press events during the PLAYER stage

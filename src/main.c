@@ -46,8 +46,8 @@ int main(void)
             gameplay_stage = SIMON;
             break;
         case SIMON:
-            prepare_delay();
             state_lsfr = re_init_state; // Initialise state to recreate the same sequence of steps as re_init_state.
+            prepare_delay();
             if (delay_ready)
             {   
                 for (int i = 0; i < sequence_length; i++)
@@ -55,12 +55,9 @@ int main(void)
                     LSFR(&state_lsfr, &step, &result); // Create new step
                     buzzer_on(step);
                     display_segment(step);
-
-
                     half_playback_delay(); // Half delay
                     buzzer_off();
                     display_segment(4);    // Display off.
-
                     half_playback_delay(); // Half delay
                 }
                 state_lsfr = re_init_state; // Re-initialise state to recreate the same sequence, for the user's, as displayed by Simon.
