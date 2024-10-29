@@ -1,9 +1,10 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+#include "lsfr.h"
+
 
 // Linear Shift Feedback Register (LSFR) variables:
-uint32_t mask = 0xE2024CAB;
 uint32_t seed = 0x11638494;
 uint32_t state_sequence;
 uint8_t step;
@@ -17,13 +18,12 @@ uint8_t result;
 //  - result: Pointer to store the least significant bit of the statevoid
 void SEQUENCE(uint32_t *state, uint8_t *step, uint8_t *result)
 {
-    *result = *state & 1;
+    *result = *state & 1u;        // Use unsigned literal
     *state >>= 1;
-
+    
     if (*result)
     {
-        *state ^= mask;
+        *state ^= LSFR_MASK;      // Use defined constant
     }
-    *step = (uint8_t)(*state & 0b11);
+    *step = *state & 0x3u;        // Use 0x3u for consistency
 }
-

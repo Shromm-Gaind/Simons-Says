@@ -2,7 +2,8 @@
 #include <avr/interrupt.h>
 
 // Linear Shift Feedback Register (LSFR) constants and variables
-extern uint32_t mask;
+#define LSFR_MASK 0xE2024CABu
+
 extern uint32_t seed;
 extern uint32_t state_sequence;
 extern uint8_t step;
