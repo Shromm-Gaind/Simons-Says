@@ -7,9 +7,7 @@ volatile uint8_t left_byte = DISP_OFF;
 volatile uint8_t right_byte = DISP_OFF;
 
 // Indexed digits encoded within hexadecimal values.
-volatile uint8_t segs[] = {0x08, 0x6B, 0x44, 0x41, 0x23, 0x11, 0x10, 0x4B, 0x00, 0x01, 0xFF};
-
-
+volatile uint8_t segments[] = {0x08, 0x6B, 0x44, 0x41, 0x23, 0x11, 0x10, 0x4B, 0x00, 0x01, 0xFF};
 
 // Function: update_display
 // Description: Updates the display bytes for the left and right digits

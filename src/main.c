@@ -1,8 +1,5 @@
 #include <avr/interrupt.h>
-#include "buzzer.h"
-#include "display.h"
 #include <util/delay.h>
-#include <stdlib.h> // Include for itoa
 
 #include "initialisation.h"
 #include "timer.h"
@@ -10,15 +7,47 @@
 #include "uart.h"
 #include "input.h"
 #include "lsfr.h"
+#include "main.h"
+#include "buzzer.h"
+#include "display.h"
 
-
-// Display variables:
-uint8_t right_digit;
-uint8_t left_digit;
 
 // Initialise state machines.
 buttons button = WAIT;
 gameplay_stages gameplay_stage = INIT;
+
+
+static inline void check_button_input(void) {
+    for (int i = 0; i < 4; i++) {
+        if ((pb_falling | key_pressed) & arr[i].pin) {
+            SEQUENCE(&state_lsfr, &step, &result);
+            key_pressed = 0;
+            playback_timer = 0;
+            input_count++;
+            button = arr[i].button;
+        }
+
+        if (pb_falling & arr[i].pin) {
+            pushbutton_received = 1;
+        }
+    }
+}
+
+static inline void play_sequence(uint16_t sequence_length) {
+    if (adc_ready_flag) {   
+        for (int i = 0; i < sequence_length; i++) {
+            SEQUENCE(&state_lsfr, &step, &result);
+            buzzer_on(step);
+            display_segment(step);
+            half_of_delay();
+            buzzer_off();
+            display_segment(4);
+            half_of_delay();
+        }
+        state_lsfr = re_init_state;
+        gameplay_stage = PLAYER;
+    }
+}
 
 
 
@@ -43,43 +72,13 @@ int main(void)
         case SIMON:
             state_lsfr = re_init_state; // Initialise state to recreate the same sequence of steps as re_init_state.
             calculate_playback_delay();
-            if (adc_ready_flag)
-            {   
-                for (int i = 0; i < sequence_length; i++)
-                {
-                    SEQUENCE(&state_lsfr, &step, &result); // Create new step
-                    buzzer_on(step);
-                    display_segment(step);
-                    half_of_delay(); // Half delay
-                    buzzer_off();
-                    display_segment(4);    // Display off.
-                    half_of_delay(); // Half delay
-                }
-                state_lsfr = re_init_state; // Re-initialise state to recreate the same sequence, for the user's, as displayed by Simon.
-                gameplay_stage = PLAYER;
-            }
+            play_sequence(sequence_length);
             break;
         case PLAYER:
             switch (button)
             {
             case WAIT:
-                for (int i = 0; i < 4; i++) // Loop through each button/key.
-                {
-                    if ((pb_falling | key_pressed) & arr[i].pin) // Check if pushbutton or key pressed.
-                    {
-                        SEQUENCE(&state_lsfr, &step, &result); // Update the step to compare the user's input to.
-                        key_pressed = 0;                   // Rest key pressed flag bitmask.
-                        playback_timer = 0;                  // Start timer.
-                        input_count++;                     // Log input.
-                        button = arr[i].button;            // Change states.
-                    }
-
-                    // Check if the input came from the pushbutton.
-                    if (pb_falling & arr[i].pin)
-                    {
-                        pushbutton_received = 1;
-                    }
-                }
+                check_button_input();
                 break;
             case BUTTON1:
                 handle_button(0);

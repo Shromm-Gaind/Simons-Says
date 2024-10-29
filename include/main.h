@@ -1,0 +1,14 @@
+#include <stdint.h>
+
+#include "types.h"
+
+// Function prototypes for our inline functions
+static inline void check_button_input(void);
+static inline void play_sequence(uint16_t sequence_length);
+
+// External declarations for global variables used across files
+uint8_t right_digit;
+uint8_t left_digit;
+extern buttons button;
+extern gameplay_stages gameplay_stage;
+
