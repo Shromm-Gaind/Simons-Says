@@ -1,6 +1,6 @@
 #include <avr/interrupt.h>
 #include "buzzer.h"
-#include "types.h"
+#include "states_m.h"
 #include "uart.h"
 #include "buzzer.h"
 #include "display.h"

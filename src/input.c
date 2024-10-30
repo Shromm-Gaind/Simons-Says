@@ -1,13 +1,13 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
-
+#include "input.h"
 #include "timer.h"
 #include "display.h"
-#include "types.h"
+#include "states_m.h"
 #include "lsfr.h"
 #include "buzzer.h"
 #include "spi.h"
-#include "input.h"
+
 
 
 // Variable definitions

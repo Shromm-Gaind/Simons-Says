@@ -1,5 +1,5 @@
-#ifndef TYPES_H
-#define TYPES_H
+#ifndef STATES_M_H
+#define STATES_M_H
 
 // Enum for gameplay stages
 typedef enum {
@@ -23,4 +23,4 @@ typedef enum {
 extern buttons button;
 extern gameplay_stages gameplay_stage;
 
-#endif // TYPES_H
+#endif // STATES_M_

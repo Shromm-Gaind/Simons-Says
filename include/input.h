@@ -2,7 +2,7 @@
 #define INPUT_H
 
 #include <avr/io.h>
-#include "types.h"
+#include "states_m.h"
 
 // Type definitions
 typedef struct {

@@ -1,6 +1,6 @@
 #include <stdint.h>
 
-#include "types.h"
+#include "states_m.h"
 
 // Function prototypes for our inline functions
 static inline void check_button_input(void);
