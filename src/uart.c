@@ -40,11 +40,11 @@ ISR(USART0_RXC_vect)
             break;
         case ',':
         case 'k':
-            increase_octave();
+            increase_frequency();
             break;
         case '.':
         case 'l':
-            decrease_octave();
+            decrease_frequency();
             break;
         default:
             key_pressed = 0;
