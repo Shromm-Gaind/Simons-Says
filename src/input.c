@@ -17,13 +17,13 @@ volatile uint8_t pb_debounced_state = 0xFF;
 uint8_t pb_changed;
 uint8_t pb_falling;
 uint8_t pb_rising;
-volatile uint8_t key_pressed = 0;
+volatile uint8_t button_active = 0;
 uint8_t pb_released = 0;
 uint8_t pushbutton_received = 0;
 
-uint8_t user_input = 0;
-uint8_t input_count = 0;
-uint8_t user_correct = 1;
+uint8_t player_input = 0;
+uint8_t sequence_position = 0;
+uint8_t sequence_matched = 1;
 
 
 button_pin mapped_array[4] = {
@@ -75,7 +75,7 @@ void button_press(uint8_t button_index)
     display_digit(button_index);
 
     if (step != button_index) {
-        user_correct = 0;
+        sequence_matched = 0;
     }
 
     if (!pb_released) {
@@ -86,7 +86,7 @@ void button_press(uint8_t button_index)
     } else if (playback_timer >= (playback_delay >> 1)) {
         buzzer_off();
         display_digit(4);
-        user_input = 1;
+        player_input = 1;
         pb_released = 0;
         button = COMPLETE;
     }

@@ -19,11 +19,11 @@ simon_stage stage = START;
 
 static inline void check_button_input(void) {
     for (int i = 0; i < 4; i++) {
-        if ((pb_falling | key_pressed) & mapped_array[i].pin) {
+        if ((pb_falling | button_active) & mapped_array[i].pin) {
             SEQUENCE(&state_sequence, &step, &result);
-            key_pressed = 0;
+            button_active = 0;
             playback_timer = 0;
-            input_count++;
+            sequence_position++;
             button = mapped_array[i].button;
         }
 
@@ -50,26 +50,26 @@ static inline void play_sequence(uint16_t sequence_length) {
 }
 
 
-// Modified version of your process_user_input function
+
 static inline void process_user_input(uint16_t sequence_length) {
-    if (user_input) {
-        if (!user_correct) {
-            user_correct = 1;    
-            input_count = 0;     
+    if (player_input) {
+        if (!sequence_matched) {
+            sequence_matched = 1;    
+            sequence_position = 0;     
             stage = FAIL;
             uart_puts("GAME OVER\n");
             send_score(sequence_length - 1);
             uart_putc('\n');
         } else {
-            if (input_count == sequence_length) {
-                input_count = 0;  
+            if (sequence_position == sequence_length) {
+                sequence_position = 0;  
                 stage = SUCCESS;
                 uart_puts("SUCCESS\n");
                 send_score(sequence_length);
                 uart_putc('\n');
             }
         }
-        user_input = 0;
+        player_input = 0;
     }
 }
 
@@ -132,7 +132,7 @@ int main(void)
         case FAIL:
             update_display(PATTERN_FAIL_LEFT, PATTERN_FAIL_RIGHT); // Fail pattern
             delay();
-            extract_digits(sequence_length, &left_digit, &right_digit); // Extract digits from sequence length
+            extract_digits(sequence_length, &left_digit, &right_digit); 
             update_display(segments[left_digit], segments[right_digit]);
             delay();
             display_digit(4); // Display off.

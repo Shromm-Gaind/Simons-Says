@@ -7,7 +7,7 @@
 
 buttons button;
 simon_stage stage;
-volatile uint8_t key_pressed;
+volatile uint8_t button_active;
 // In your global variables (at top of file or in header)
 volatile uint8_t reading_name = 0;
 volatile uint8_t name_complete = 0;
@@ -39,19 +39,19 @@ ISR(USART0_RXC_vect)
         {
         case '1':
         case 'q':
-            key_pressed = PIN4_bm;
+            button_active = PIN4_bm;
             break;
         case '2':
         case 'w':
-            key_pressed = PIN5_bm;
+            button_active = PIN5_bm;
             break;
         case '3':
         case 'e':
-            key_pressed = PIN6_bm;
+            button_active = PIN6_bm;
             break;
         case '4':
         case 'r':
-            key_pressed = PIN7_bm;
+            button_active = PIN7_bm;
             break;
         case ',':
         case 'k':
@@ -62,7 +62,7 @@ ISR(USART0_RXC_vect)
             decrease_frequency();
             break;
         default:
-            key_pressed = 0;
+            button_active = 0;
             break;
         }
     }
