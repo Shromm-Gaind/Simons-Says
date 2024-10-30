@@ -32,9 +32,7 @@ typedef struct {
 } button_pin;
 
 // Button mapping array
-extern button_pin arr[4];
-
-
+extern button_pin mapped_array[4];
 
 // Function: handle_button
 // Description: Handles button press events during the PLAYER stage

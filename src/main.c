@@ -19,15 +19,15 @@ gameplay_stages gameplay_stage = INIT;
 
 static inline void check_button_input(void) {
     for (int i = 0; i < 4; i++) {
-        if ((pb_falling | key_pressed) & arr[i].pin) {
+        if ((pb_falling | key_pressed) & mapped_array[i].pin) {
             SEQUENCE(&state_sequence, &step, &result);
             key_pressed = 0;
             playback_timer = 0;
             input_count++;
-            button = arr[i].button;
+            button = mapped_array[i].button;
         }
 
-        if (pb_falling & arr[i].pin) {
+        if (pb_falling & mapped_array[i].pin) {
             pushbutton_received = 1;
         }
     }

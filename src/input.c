@@ -8,6 +8,7 @@
 #include "buzzer.h"
 #include "spi.h"
 
+
 // Variables for pushbutton/key press handling:
 uint8_t pb_sample = 0xFF;
 uint8_t pb_sample_r = 0xFF;
@@ -68,8 +69,7 @@ typedef struct buttons_pins
 } button_pin;
 
 // Array of mapped bitmasks and buttons.
-button_pin arr[4] = {{PIN4_bm, BUTTON1}, {PIN5_bm, BUTTON2}, {PIN6_bm, BUTTON3}, {PIN7_bm, BUTTON4}};
-
+button_pin mapped_array[4] = {{PIN4_bm, BUTTON1}, {PIN5_bm, BUTTON2}, {PIN6_bm, BUTTON3}, {PIN7_bm, BUTTON4}};
 
 
 // Function: handle_button
@@ -78,7 +78,7 @@ button_pin arr[4] = {{PIN4_bm, BUTTON1}, {PIN5_bm, BUTTON2}, {PIN6_bm, BUTTON3},
 //  - button_index: Index of the button pressed
 void handle_button(uint8_t button_index) 
 {
-    const uint8_t button_pin = arr[button_index].pin;
+    const uint8_t button_pin = mapped_array[button_index].pin;
     
     buzzer_on(button_index);
     display_segment(button_index);
