@@ -2,8 +2,10 @@
 #ifndef NOTES_H
 #define NOTES_H
 
+
+
 typedef enum {
-    E_HIGH = 0,  // 36024
+    E_HIGH = 0,  // 36024  
     C_SHARP = 1, // 42840
     A = 2,       // 26984
     E_LOW = 3    // 72056

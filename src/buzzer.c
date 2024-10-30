@@ -20,12 +20,16 @@ volatile int8_t frequency = 0;
  * These values represent the timer periods needed to generate specific frequencies.
  * Lower period values produce higher frequencies/pitches.
  * scaled by three to avoid any turnication
+ * 
+ * (1 / F)   / (1 / (( 20MHz * 10^6 ) / 12) 
+ * NOTE TCA0.SINGLE.CTRLA = TCA_SINGLE_CLKSEL_DIV2_gc; 
+ * prescaler IS 2
  */
 const uint32_t base_periods[4] = {
-    [E_HIGH] = 36024,   // E high note
-    [C_SHARP] = 42840,  // C# note
-    [A] = 26984,        // A note
-    [E_LOW] = 72056     // E low note
+    [E_HIGH] = 36024,   // E high note 370Hz
+    [C_SHARP] = 42840,  // C# note 311Hz
+    [A] = 26984,        // A note 494Hz
+    [E_LOW] = 72056     // E low note 185hz
 };
 
 /**

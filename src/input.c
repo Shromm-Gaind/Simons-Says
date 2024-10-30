@@ -71,17 +71,15 @@ button_pin mapped_array[4] = {
  * change is only registered after multiple consistent samples.
  */
 void pb_debounce(void) {
-    static uint8_t count0 = 0; // Counter bit 0 for vertical counting
-    static uint8_t count1 = 0; // Counter bit 1 for vertical counting
+    static uint8_t count0 = 0; 
+    static uint8_t count1 = 0; 
 
-    uint8_t pb_sample = PORTA.IN;    // Sample current button states
-    uint8_t pb_changed = (pb_sample ^ pb_debounced_state); // Detect changes
+    uint8_t pb_sample = PORTA.IN;    
+    uint8_t pb_changed = (pb_sample ^ pb_debounced_state); 
 
-    /* Update vertical counter bits */
     count1 = (count1 ^ count0) & pb_changed;
     count0 = ~count0 & pb_changed;
 
-    /* Update debounced state when both counter bits indicate stable change */
     pb_debounced_state ^= (count0 & count1);
 }
 
