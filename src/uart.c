@@ -8,6 +8,10 @@
 buttons button;
 simon_stage stage;
 volatile uint8_t key_pressed;
+// In your global variables (at top of file or in header)
+volatile uint8_t reading_name = 0;
+volatile uint8_t name_complete = 0;
+
 
 // Interrupt Service Routine: USART0_RXC_vect
 // Description: Handles USART0 receive complete interrupt
@@ -15,6 +19,17 @@ ISR(USART0_RXC_vect)
 {
     // Read the received data from USART data register
     char rx_data = USART0.RXDATAL;
+
+    if (reading_name) {
+        if (rx_data == '\n') {
+            reading_name = 0;
+            name_complete = 1;
+            uart_putc('\n');  // Echo the newline
+        } else {
+            uart_putc(rx_data);  // Echo the character
+        }
+        return;
+    }
 
     // Determine the action based on the received character
     // Only take gameplay input if it's the user's turn.

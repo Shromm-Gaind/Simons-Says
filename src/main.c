@@ -132,11 +132,12 @@ int main(void)
         case FAIL:
             update_display(PATTERN_FAIL_LEFT, PATTERN_FAIL_RIGHT); // Fail pattern
             delay();
-            extract_digits(sequence_length, &left_digit, &right_digit); // Extract digits from the sequence length (user's score) to be displayed.
+            extract_digits(sequence_length, &left_digit, &right_digit); // Extract digits from sequence length
             update_display(segments[left_digit], segments[right_digit]);
             delay();
             display_digit(4); // Display off.
             delay();
+            uart_puts("Enter name: ");  // Add name prompt here after all displays and delays
             SEQUENCE(&state_sequence, &step, &result); // Get next step to re-initialise to.
             seed = state_sequence;        // Re-initialise sequence to where it was left off.
             stage = START;
