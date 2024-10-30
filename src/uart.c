@@ -20,6 +20,8 @@ ISR(USART0_RXC_vect)
     // Read the received data from USART data register
     char rx_data = USART0.RXDATAL;
 
+    //not the correct way to do maybe using a buffer would help
+    // but ran out of time
     if (reading_name) {
         if (rx_data == '\n') {
             reading_name = 0;
@@ -88,22 +90,25 @@ void uart_puts(char *string)
 // Function to send score as string
 void send_score(uint16_t score)
 {
-    char score_str[6];  // Max 5 digits + null terminator
+    char score_str[6];
     uint8_t idx = 0;
     
-    // Handle zero case
     if (score == 0) {
         uart_putc('0');
         return;
     }
     
-    // Convert to string by repeatedly getting remainder
     while (score > 0) {
-        score_str[idx++] = '0' + (score % 10);
-        score = score / 10;  // Using assignment instead of division
+        uint8_t digit = 0;
+        uint16_t temp = score;
+        while (temp >= 10) {
+            temp -= 10;
+            digit++;
+        }
+        score_str[idx++] = '0' + temp;
+        score = digit;
     }
     
-    // Send digits in reverse order
     while (idx > 0) {
         uart_putc(score_str[--idx]);
     }
