@@ -25,6 +25,10 @@ extern const uint8_t segments[11];
 #define PATTERN_FAIL_LEFT    0x77   // Binary: 01110111
 #define PATTERN_FAIL_RIGHT   0x77   // Binary: 01110111
 
+typedef enum {
+    SIDE_LEFT = 0,
+    SIDE_RIGHT = 1
+} display_side_t;
 
 
 void update_display(const uint8_t left, const uint8_t right);

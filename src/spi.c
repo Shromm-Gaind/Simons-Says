@@ -7,17 +7,16 @@
 // Description: Writes data to the SPI bus, alternating between left and right bytes.
 void spi_write(void)
 {
-    static uint8_t current_side = 0; // Current side to write (0 for left, 1 for right)
-
-    if (current_side)
-    {
-        SPI0.DATA = left_byte; // Write left byte to SPI
-    }
-    else
-    {
-        SPI0.DATA = right_byte; // Write right byte to SPI
-    }
-
-    // Toggle the current side.
-    current_side = !current_side;
+    // Use a register variable to ensure the compiler keeps this in a register
+    register display_side_t current_side asm("r16");
+    static display_side_t saved_side = SIDE_LEFT;
+    
+    // Load the saved state
+    current_side = saved_side;
+    
+    // Direct assignment using ternary operator - typically compiles to branchless code
+    SPI0.DATA = current_side ? right_byte : left_byte;
+    
+    // Toggle using bitwise XOR - typically more efficient than logical NOT
+    saved_side = current_side ^ 1;
 }
