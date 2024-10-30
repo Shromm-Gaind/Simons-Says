@@ -6,12 +6,19 @@
 volatile int8_t frequency = 0;
 
 
-uint32_t period_map(uint8_t tone) {
-    // Base periods for tones, bit-shifted by 3 because of trauncation in tests
-    static const uint32_t base_periods[4] = {36024, 42840, 26984, 72056};
+// Define the array with corresponding notes
+const uint32_t base_periods[4] = {
+    [E_HIGH] = 36024,   // E high note
+    [C_SHARP] = 42840,  // C# note
+    [A] = 26984,        // A note
+    [E_LOW] = 72056     // E low note
+};
 
-    return base_periods[tone] >> (frequency + 3); // Adjusted period for scaling
+uint32_t period_map(Note note) {
+    return base_periods[note] >> (frequency + scaling_factor);
 }
+
+
 void increase_frequency(void)
 {
     if (frequency < max_frequency)
@@ -26,10 +33,10 @@ void decrease_frequency(void)
 }
 
 
-void buzzer_on(uint8_t tone) {
-    uint32_t tone_period = period_map(tone); // Retrieve period for given tone
-    TCA0.SINGLE.PERBUF = tone_period;        // Set period for PWM
-    TCA0.SINGLE.CMP0BUF = tone_period >> 1;  // Set 50% duty cycle
+void buzzer_on(Note note) {
+    uint32_t tone_period = period_map(note);
+    TCA0.SINGLE.PERBUF = tone_period;
+    TCA0.SINGLE.CMP0BUF = tone_period >> 1;
 }
 
 

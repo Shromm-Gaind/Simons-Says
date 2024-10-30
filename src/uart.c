@@ -1,8 +1,8 @@
 #include <avr/interrupt.h>
-#include "buzzer.h"
+#include "notes.h"   // For Note enum
+#include "buzzer.h"  // For buzzer functions
 #include "states_m.h"
 #include "uart.h"
-#include "buzzer.h"
 #include "display.h"
 
 buttons button;
