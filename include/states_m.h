@@ -3,24 +3,24 @@
 
 // Enum for gameplay stages
 typedef enum {
-    INIT,
-    SIMON,
-    PLAYER,
+    START,
+    START_SEQUENCE,
+    INPUT,
     SUCCESS,
     FAIL
-} gameplay_stages;
+} simon_stage;
 
 // Enum for button states
 typedef enum {
-    WAIT,
-    BUTTON1,
-    BUTTON2,
-    BUTTON3,
-    BUTTON4
+    COMPLETE,
+    S1,
+    S2,
+    S3,
+    S4
 } buttons;
 
 // Declare external variables for button and gameplay stage
 extern buttons button;
-extern gameplay_stages gameplay_stage;
+extern simon_stage stage;
 
-#endif // STATES_M_
+#endif // STATES_M_H

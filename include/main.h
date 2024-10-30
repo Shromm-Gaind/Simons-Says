@@ -12,5 +12,5 @@ static inline void process_user_input(uint16_t sequence_length);
 uint8_t right_digit;
 uint8_t left_digit;
 extern buttons button;
-extern gameplay_stages gameplay_stage;
+extern simon_stage stage;
 

@@ -27,10 +27,10 @@ uint8_t user_correct = 1;
 
 
 button_pin mapped_array[4] = {
-    {PIN4_bm, BUTTON1},
-    {PIN5_bm, BUTTON2},
-    {PIN6_bm, BUTTON3},
-    {PIN7_bm, BUTTON4}
+    {PIN4_bm, S1},
+    {PIN5_bm, S2},
+    {PIN6_bm, S3},
+    {PIN7_bm, S4}
 };
 
 
@@ -88,7 +88,7 @@ void button_press(uint8_t button_index)
         display_segment(4);
         user_input = 1;
         pb_released = 0;
-        button = WAIT;
+        button = COMPLETE;
     }
 }
 

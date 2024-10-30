@@ -13,8 +13,8 @@
 
 
 // Initialise state machines.
-buttons button = WAIT;
-gameplay_stages gameplay_stage = INIT;
+buttons button = COMPLETE;
+simon_stage stage = START;
 
 
 static inline void check_button_input(void) {
@@ -45,7 +45,7 @@ static inline void play_sequence(uint16_t sequence_length) {
             half_of_delay();
         }
         state_sequence = seed;
-        gameplay_stage = PLAYER;
+        stage = INPUT;
     }
 }
 
@@ -54,11 +54,11 @@ static inline void process_user_input(uint16_t sequence_length) {
         if (!user_correct) {
             user_correct = 1;    // Reset flag
             input_count = 0;     // Reset flag
-            gameplay_stage = FAIL;
+            stage = FAIL;
         } else {
             if (input_count == sequence_length) {
                 input_count = 0;  // Reset count
-                gameplay_stage = SUCCESS;
+                stage = SUCCESS;
             }
         }
         user_input = 0;  // Reset user input flag
@@ -79,37 +79,37 @@ int main(void)
     {
         check_edge();
 
-        switch (gameplay_stage)
+        switch (stage)
         {
-        case INIT:
+        case START:
             sequence_length = 1; // Unitialise the sequence length to 1 on reset/initialisation.
-            gameplay_stage = SIMON;
+            stage = START_SEQUENCE;
             break;
-        case SIMON:
+        case START_SEQUENCE:
             state_sequence = seed; // Initialise state to recreate the same sequence of steps as re_init_state.
             calculate_playback_delay();
             play_sequence(sequence_length);
             break;
-        case PLAYER:
+        case INPUT:
             switch (button)
             {
-            case WAIT:
+            case COMPLETE:
                 check_button_input();
                 break;
-            case BUTTON1:
+            case S1:
                 button_press(0);
                 break;
-            case BUTTON2:
+            case S2:
                 button_press(1);
                 break;
-            case BUTTON3:
+            case S3:
                 button_press(2);
                 break;
-            case BUTTON4:
+            case S4:
                 button_press(3);
                 break;
             default:
-                button = WAIT;
+                button = COMPLETE;
                 break;
             }
             process_user_input(sequence_length);
@@ -119,7 +119,7 @@ int main(void)
             delay();
             display_segment(4); // Display off.
             sequence_length++;
-            gameplay_stage = SIMON;
+            stage = START_SEQUENCE;
             break;
         case FAIL:
             update_display(PATTERN_FAIL_LEFT, PATTERN_FAIL_RIGHT); // Fail pattern
@@ -131,10 +131,10 @@ int main(void)
             delay();
             SEQUENCE(&state_sequence, &step, &result); // Get next step to re-initialise to.
             seed = state_sequence;        // Re-initialise sequence to where it was left off.
-            gameplay_stage = INIT;
+            stage = START;
             break;
         default:
-            gameplay_stage = INIT;
+            stage = START;
             break;
         }
     }

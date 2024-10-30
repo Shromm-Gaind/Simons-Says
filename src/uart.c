@@ -6,7 +6,7 @@
 #include "display.h"
 
 buttons button;
-gameplay_stages gameplay_stage;
+simon_stage stage;
 volatile uint8_t key_pressed;
 
 // Interrupt Service Routine: USART0_RXC_vect
@@ -18,7 +18,7 @@ ISR(USART0_RXC_vect)
 
     // Determine the action based on the received character
     // Only take gameplay input if it's the user's turn.
-    if (gameplay_stage == PLAYER)
+    if (stage == INPUT)
     {
         switch (rx_data)
         {
