@@ -1,6 +1,6 @@
 #include <avr/interrupt.h>
-#include "notes.h"   // For Note enum
-#include "buzzer.h"  // For buzzer functions
+#include "notes.h"   
+#include "buzzer.h"
 #include "states_m.h"
 #include "uart.h"
 #include "display.h"
@@ -53,23 +53,43 @@ ISR(USART0_RXC_vect)
     }
 }
 
-// Function: uart_putc
-// Description: Outputs a character to UART.
 void uart_putc(uint8_t c)
 {
-    // Wait until the transmit data register is empty
     while (!(USART0.STATUS & USART_DREIF_bm))
         ;
     USART0.TXDATAL = c;
 }
 
-// Function: uart_puts
-// Description: Outputs a series of characters (string) to UART.
+
 void uart_puts(char *string)
 {
-    // Output each character until the null terminator is reached.
+
     while (*string)
     {
         uart_putc(*string++);
+    }
+}
+
+// Function to send score as string
+void send_score(uint16_t score)
+{
+    char score_str[6];  // Max 5 digits + null terminator
+    uint8_t idx = 0;
+    
+    // Handle zero case
+    if (score == 0) {
+        uart_putc('0');
+        return;
+    }
+    
+    // Convert to string by repeatedly getting remainder
+    while (score > 0) {
+        score_str[idx++] = '0' + (score % 10);
+        score = score / 10;  // Using assignment instead of division
+    }
+    
+    // Send digits in reverse order
+    while (idx > 0) {
+        uart_putc(score_str[--idx]);
     }
 }

@@ -25,7 +25,7 @@ static const uint8_t segment_patterns[][2] = {
     {DISP_OFF, DISP_BAR_RIGHT}     // "   |"
 };
 
-void display_segment(uint8_t step) {
+void display_digit(uint8_t step) {
     if (step < 4) {
         update_display(segment_patterns[step][0], 
                       segment_patterns[step][1]);

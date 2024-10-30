@@ -32,6 +32,6 @@ typedef enum {
 
 
 void update_display(const uint8_t left, const uint8_t right);
-void display_segment(uint8_t step);
+void display_digit(uint8_t step);
 
 void extract_digits(uint32_t number, uint8_t *left_digit, uint8_t *right_digit);

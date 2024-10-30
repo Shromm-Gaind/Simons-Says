@@ -72,7 +72,7 @@ void button_press(uint8_t button_index)
     const uint8_t button_pin = mapped_array[button_index].pin;
     
     buzzer_on(button_index);
-    display_segment(button_index);
+    display_digit(button_index);
 
     if (step != button_index) {
         user_correct = 0;
@@ -85,7 +85,7 @@ void button_press(uint8_t button_index)
         }
     } else if (playback_timer >= (playback_delay >> 1)) {
         buzzer_off();
-        display_segment(4);
+        display_digit(4);
         user_input = 1;
         pb_released = 0;
         button = COMPLETE;

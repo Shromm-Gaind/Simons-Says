@@ -38,10 +38,10 @@ static inline void play_sequence(uint16_t sequence_length) {
         for (int i = 0; i < sequence_length; i++) {
             SEQUENCE(&state_sequence, &step, &result);
             buzzer_on(step);
-            display_segment(step);
+            display_digit(step);
             half_of_delay();
             buzzer_off();
-            display_segment(4);
+            display_digit(4);
             half_of_delay();
         }
         state_sequence = seed;
@@ -49,19 +49,27 @@ static inline void play_sequence(uint16_t sequence_length) {
     }
 }
 
+
+// Modified version of your process_user_input function
 static inline void process_user_input(uint16_t sequence_length) {
     if (user_input) {
         if (!user_correct) {
-            user_correct = 1;    // Reset flag
-            input_count = 0;     // Reset flag
+            user_correct = 1;    
+            input_count = 0;     
             stage = FAIL;
+            uart_puts("GAME OVER\n");
+            send_score(sequence_length - 1);
+            uart_putc('\n');
         } else {
             if (input_count == sequence_length) {
-                input_count = 0;  // Reset count
+                input_count = 0;  
                 stage = SUCCESS;
+                uart_puts("SUCCESS\n");
+                send_score(sequence_length);
+                uart_putc('\n');
             }
         }
-        user_input = 0;  // Reset user input flag
+        user_input = 0;
     }
 }
 
@@ -117,7 +125,7 @@ int main(void)
         case SUCCESS:
             update_display(PATTERN_SUCCESS_LEFT, PATTERN_SUCCESS_RIGHT); // Success pattern
             delay();
-            display_segment(4); // Display off.
+            display_digit(4); // Display off.
             sequence_length++;
             stage = START_SEQUENCE;
             break;
@@ -127,7 +135,7 @@ int main(void)
             extract_digits(sequence_length, &left_digit, &right_digit); // Extract digits from the sequence length (user's score) to be displayed.
             update_display(segments[left_digit], segments[right_digit]);
             delay();
-            display_segment(4); // Display off.
+            display_digit(4); // Display off.
             delay();
             SEQUENCE(&state_sequence, &step, &result); // Get next step to re-initialise to.
             seed = state_sequence;        // Re-initialise sequence to where it was left off.
