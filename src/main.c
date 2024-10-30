@@ -115,14 +115,14 @@ int main(void)
             process_user_input(sequence_length);
             break;
         case SUCCESS:
-            update_display(0, 0); // Success pattern.
+            update_display(PATTERN_SUCCESS_LEFT, PATTERN_SUCCESS_RIGHT); // Success pattern
             delay();
             display_segment(4); // Display off.
             sequence_length++;
             gameplay_stage = SIMON;
             break;
         case FAIL:
-            update_display(0b01110111, 0b01110111); // Fail pattern.
+            update_display(PATTERN_FAIL_LEFT, PATTERN_FAIL_RIGHT); // Fail pattern
             delay();
             extract_digits(sequence_length, &left_digit, &right_digit); // Extract digits from the sequence length (user's score) to be displayed.
             update_display(segments[left_digit], segments[right_digit]);

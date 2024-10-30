@@ -19,6 +19,12 @@ extern const uint8_t segments[11];
 
 #define DISP_LHS (1 << 7)
 
+#define PATTERN_SUCCESS_LEFT  0x00  // Binary: 00000000
+#define PATTERN_SUCCESS_RIGHT 0x00  // Binary: 00000000
+
+#define PATTERN_FAIL_LEFT    0x77   // Binary: 01110111
+#define PATTERN_FAIL_RIGHT   0x77   // Binary: 01110111
+
 
 
 void update_display(const uint8_t left, const uint8_t right);
