@@ -97,16 +97,16 @@ int main(void)
                 check_button_input();
                 break;
             case BUTTON1:
-                handle_button(0);
+                button_press(0);
                 break;
             case BUTTON2:
-                handle_button(1);
+                button_press(1);
                 break;
             case BUTTON3:
-                handle_button(2);
+                button_press(2);
                 break;
             case BUTTON4:
-                handle_button(3);
+                button_press(3);
                 break;
             default:
                 button = WAIT;

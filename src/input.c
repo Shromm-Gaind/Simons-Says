@@ -7,9 +7,10 @@
 #include "lsfr.h"
 #include "buzzer.h"
 #include "spi.h"
+#include "input.h"
 
 
-// Variables for pushbutton/key press handling:
+// Variable definitions
 uint8_t pb_sample = 0xFF;
 uint8_t pb_sample_r = 0xFF;
 volatile uint8_t pb_debounced_state = 0xFF;
@@ -20,10 +21,17 @@ volatile uint8_t key_pressed = 0;
 uint8_t pb_released = 0;
 uint8_t pushbutton_received = 0;
 
-// Variables for gameplay state:
 uint8_t user_input = 0;
 uint8_t input_count = 0;
 uint8_t user_correct = 1;
+
+
+button_pin mapped_array[4] = {
+    {PIN4_bm, BUTTON1},
+    {PIN5_bm, BUTTON2},
+    {PIN6_bm, BUTTON3},
+    {PIN7_bm, BUTTON4}
+};
 
 
 
@@ -58,25 +66,8 @@ void check_edge(void)
     pb_rising = pb_changed & pb_sample;
 }
 
-// Function: check_edge
-// Description: Checks for rising or falling edges from the pushbuttons.
 
-// Struct containing enum type buttons and their associated bitmasks.
-typedef struct buttons_pins
-{
-    uint8_t pin;
-    buttons button;
-} button_pin;
-
-// Array of mapped bitmasks and buttons.
-button_pin mapped_array[4] = {{PIN4_bm, BUTTON1}, {PIN5_bm, BUTTON2}, {PIN6_bm, BUTTON3}, {PIN7_bm, BUTTON4}};
-
-
-// Function: handle_button
-// Description: Handles button press events during the PLAYER stage
-// Parameters:
-//  - button_index: Index of the button pressed
-void handle_button(uint8_t button_index) 
+void button_press(uint8_t button_index) 
 {
     const uint8_t button_pin = mapped_array[button_index].pin;
     
